@@ -96,7 +96,7 @@ This repository is for non-commercial use only. If you want to contribute to the
 repository, please contact qiweis2015@gmail.com.
 
 If you use the model or results in this repository in your work, please cite the 
-link to this repository.
+link to this repository along with the author's name: Qiwei Shao.
 
 ## References
 <a id="1">[1]</a> 
