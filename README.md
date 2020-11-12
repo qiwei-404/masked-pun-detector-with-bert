@@ -1,6 +1,9 @@
-# Masked Pun Detector Trained with BERT
+# Detecting Pun with Masked Fine-tuning
 
 This is a repository of a simple pun detector trained on the BERT[[1]](#1) architecture.  
+In addition to conventional fine-tuning, I explore fine-tuning with masked tokens.
+The masked fine-tuning approach outperforms conventional fine-tuning on Pun of the Day
+dataset.
 
 ## Data
 For fine-tuning the pretrained BERT embeddings, I use the Pun of the Day 
@@ -25,11 +28,18 @@ the embeddings on the Pun of the Day dataset[[2]](#2).
 ### Fine-tuning
 I compare two fine-tuning methods in my experiment. The first model is finetuned 
 on the unmodified SemEval 2017 heterographic dataset. The second model is finetuned 
-on the same dataset but with \<MASK\>. I get the inspiration from the masked finetuning
-from the fact that humans are able to laugh at puns with slight paraphrasing, or even
-when they do not hear every word in the pun clearly. Masked finetuning is a simple
-way to simulate such variation in puns. In the future, I would like to apply more
-types of variations in the fine-tuning process.
+on the same dataset but with \<MASK\>. The sequence in fine-tuning follows standard
+practice of BERT, which starts with a binary \<CLS\> token indicating whether the
+following sentence is a pun.
+
+Conventionally, people believe that introducing
+\<MASK\> in fine-tuning would skew the vocabulary distribution which leads to 
+vocabulary mismatch at test time. However, if the \<MASK\> were applied uniformly
+over the corpus, it is likely that \<CLS\> and other tokens would attend to it in a similar way 
+they attend to another frequent token (e.g. articles, comma, period). The \<MASK\>
+in fine-tuning might allow the model to learn the position of the pun word in the
+sentence, since masking the pun word might lead to false negatives. In the future, I would like to 
+test this on pun location tasks in addition to pun detection.
 
 The fine-tuning code is based on the BERT repository[[5]](#5). To fine-tune the 
 baseline model, run 
@@ -82,7 +92,7 @@ python run_classifier.py \
 ## Results
 On the 1780 testing examples, baseline fine-tuning achieves an accuracy of 0.82,
 whereas masked fine-tuning achieves an accuracy of 0.86. This shows the masked 
-dataset is effective in fine-tuning. However, further work is needed 
+fine-tuning could improve pun detection accuracy. However, further work is needed 
 to investigate how much improvement on accuracy is due to masked fine-tuning as 
 opposed the the addition of duplicate training instances.
 
